@@ -29,7 +29,8 @@ typedef struct Noeud {
 } N_Noeud;
 
 typedef struct ListeAttente {
-    N_Noeud *premier;    
+    N_Noeud *premier; 
+    int taille;   
 } ListeAttente;
 
 #endif

@@ -7,10 +7,10 @@
 
 void écrire_clients() {
     int nombre_client;
+    nombre_client = rand() % 100;
+    printf("le nombre de clients recu dans la liste d'attente aujourd'hui est de %d\n", nombre_client);
     FILE* fichier;
     fichier = fopen("./modules/texte/clients.txt", "w");
-    printf("combien de client allons-nous mettre aujourd'hui ");
-    scanf("%d", &nombre_client);
     for (int i = 1; i < nombre_client +1; i++) {
         fprintf(fichier, "%d\n", i);
     } 
@@ -27,7 +27,8 @@ void creation_liste_attente(ListeAttente *liste) {
     }
 
     // Insérer les clients dans la liste chaînée
-    while (fscanf(fichier, "%d", &c.indice) == 1) {  // Lecture de l'indice du client
+    while (fscanf(fichier, "%d", &c.indice) == 1) {
+        liste->taille++;
         // Allouer de la mémoire pour un nouveau noeud
         N_Noeud *nouveau = (N_Noeud *)malloc(sizeof(N_Noeud));
         if (nouveau == NULL) {
@@ -82,15 +83,7 @@ void ajout_arrivée_clients(ListeAttente *liste) {
     }
     Heure minsrv = {8, 0};
     Heure maxsrv = {19, 0};
-    double lambda;
-    do {
-        printf("Entrez le paramètre lambda pour les arrivées (entre 0 et 1) : \n");
-        scanf("%lf", &lambda);
-
-        if (lambda < 0 || lambda > 1) {
-            printf("Erreur : lambda doit être compris entre 0 et 1.\n");
-        }
-    } while (lambda < 0 || lambda > 1);
+    float lambda = (float)rand() / (float)RAND_MAX;
 
     N_Noeud *courant = liste->premier;
     N_Noeud *précédent = NULL;
@@ -128,48 +121,6 @@ void ajout_arrivée_clients(ListeAttente *liste) {
     }
 }
 
-void organisation_liste_attente(ListeAttente *liste) {
-    // Créer une nouvelle liste d'attente triée
-    N_Noeud *trie = NULL;
-    
-    // Récupérer la liste d'attente non triée à partir de son premier élément
-    N_Noeud *courant = liste->premier;
-
-    while (courant != NULL) {
-        N_Noeud *suivant = courant->suivant;
-
-        // Si la liste triée est vide ou l'élément courant doit être inséré en tête de la liste triée
-        if (trie == NULL || 
-            // Si l'heure du courant est plus petite que celle de la tête de la liste triée
-            (courant->client.t.h.heure < trie->client.t.h.heure ||
-            (courant->client.t.h.heure == trie->client.t.h.heure &&
-             courant->client.t.h.minute < trie->client.t.h.minute))) {
-            // Insérer l'élément en début de liste triée
-            courant->suivant = trie;
-            trie = courant;
-        }
-        else {
-            // Trouver la position d'insertion dans la liste triée
-            N_Noeud *temp = trie;
-            while (temp->suivant != NULL && 
-                   (temp->suivant->client.t.h.heure < courant->client.t.h.heure ||
-                   (temp->suivant->client.t.h.heure == courant->client.t.h.heure &&
-                    temp->suivant->client.t.h.minute <= courant->client.t.h.minute))) {
-                temp = temp->suivant;
-            }
-
-            // Insérer l'élément au bon endroit dans la liste triée
-            courant->suivant = temp->suivant;
-            temp->suivant = courant;
-        }
-        
-        // Passer au client suivant dans la liste non triée
-        courant = suivant;
-    }
-
-    // Mettre à jour la tête de la liste avec la liste triée
-    liste->premier = trie;
-}
 
 
 void afficherListe(ListeAttente *liste) {

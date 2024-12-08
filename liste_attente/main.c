@@ -1,11 +1,8 @@
 #include "./modules/c/clients.c"
 #include "./modules/c/gestion.c"
-/* 
-   // 1. Générer le fichier clients.txt1
-    printf("Génération du fichier clients.txt...\n");
-    ajout_client();
- */
-int main() {
+
+
+void simulerJournee() {
     ListeAttente liste;
     printf("Génération du fichier clients.txt...\n");
     écrire_clients();
@@ -15,14 +12,6 @@ int main() {
 
     printf("génération des arrivées des clients\n");
     ajout_arrivée_clients(&liste); 
-
-
-    printf("Liste d'attente non triée :\n");
-    afficherListe(&liste);
-
-    // 4. Trier la liste d'attente par heure
-    printf("\nOrganisation de la liste d'attente...\n");
-    organisation_liste_attente(&liste);
 
     // 5. Afficher la liste d'attente triée
     printf("Liste d'attente triée :\n");
@@ -40,6 +29,16 @@ int main() {
 
     printf("Liste finale :\n");
     afficherListe(&liste);
+}
+
+int main() {
+    int nombre_journee;
+    printf("combien de journée voulez vous simuler");
+    scanf("%d", &nombre_journee);
+    for (int i = 1; i < nombre_journee + 1; i++) {
+        printf("Journee %d\n", i);
+        simulerJournee();
+    } 
 
     return 0;
 }
