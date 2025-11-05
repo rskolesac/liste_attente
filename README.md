@@ -16,19 +16,7 @@ nombre variable de caissiers,
 priorités clients (VIP, files rapides),
 horaires dynamiques ou fermetures automatiques,
 règles d’ouverture de nouvelles caisses selon la charge.
- Architecture globale
-+------------------------------------------------------+
-|                      Simulation CLI                  |
-|  (orchestration des expériences, comparaison KPI)    |
-+------------------------------------------------------+
-                |                       ^
-                v                       |
-+--------------------------+     +----------------------+
-|   Event Generator        | --> |   Metrics Collector  |
-|  (arrivées, durées, etc) |     | (latences, files, KPI)|
-+--------------------------+     +----------------------+
-                |
-                v
+
 +--------------------------------------------+
 |         Simulation Engine (Core)           |
 |--------------------------------------------|
